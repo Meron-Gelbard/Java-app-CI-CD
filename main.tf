@@ -43,19 +43,17 @@ resource "aws_instance" "java-app" {
     Name = "java-app"
   }
 
-}
-
-provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y docker.io",
-      "sudo systemctl start docker",
-      "sudo usermod -aG docker ubuntu",
-      "sudo apt-get install -y git",
-      "sudo systemctl enable docker",
-      "sudo docker login --username=${var.dockerhub_username} --password=${var.dockerhub_password}",
-      "sudo docker pull ${var.dockerhub_username}/java-app:latest",
-      "sudo docker run -d ${var.dockerhub_username}/java-app:latest",
-    ]
-  }
+  provisioner "remote-exec" {
+      inline = [
+        "sudo apt-get update -y",
+        "sudo apt-get install -y docker.io",
+        "sudo systemctl start docker",
+        "sudo usermod -aG docker ubuntu",
+        "sudo apt-get install -y git",
+        "sudo systemctl enable docker",
+        "sudo docker login --username=${var.dockerhub_username} --password=${var.dockerhub_password}",
+        "sudo docker pull ${var.dockerhub_username}/java-app:latest",
+        "sudo docker run -d ${var.dockerhub_username}/java-app:latest",
+      ]
+    }
 }
