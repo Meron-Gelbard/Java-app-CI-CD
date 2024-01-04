@@ -1,11 +1,16 @@
-FROM maven:latest
+FROM maven:3.8.6-jdk-11-slim AS build
 
 WORKDIR /app
 
-COPY pom.xml ./
-COPY deliver.sh ./
-COPY src ./src
+COPY . .
 
-RUN mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+RUN mvn validate
+RUN mvn test
+RUN mvn clean package
+RUN mvn install
 
-CMD ["sh", "deliver.sh"]
+FROM openjdk:11-jre-slim
+
+COPY --from=build /app/target/my-app-1.0-SNAPSHOT.jar /app/target/my-app-1.0-SNAPSHOT.jar
+
+CMD ["java","-jar","/app/target/my-app-1.0-SNAPSHOT.jar"]
