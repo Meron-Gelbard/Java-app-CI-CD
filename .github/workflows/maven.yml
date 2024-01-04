@@ -31,4 +31,4 @@ jobs:
       run: mvn -B -DskipTests clean package --file pom.xml
 
     - name: Test with maven
-    - run: mvn test
+      run: mvn test
