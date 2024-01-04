@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN mvn validate
-RUN mvn test
 RUN mvn clean package
 RUN mvn install
 
