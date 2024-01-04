@@ -2,8 +2,8 @@ FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-COPY .mvn/ .mvn
-COPY deliver.sh pom.xml ./
+COPY pom.xml ./
+COPY deliver.sh ./
 COPY src ./src
 
 CMD ["sh", "deliver.sh"]
