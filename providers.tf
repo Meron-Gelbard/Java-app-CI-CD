@@ -11,13 +11,12 @@ terraform {
     region         = "us-east-1"
     dynamodb_table = "terraform-lock"
     encrypt        = true
-    shared_credentials_files = ["/home/ubuntu/.aws/credentials"]
+    shared_credentials_file = "/home/ubuntu/.aws/credentials"
     profile                 = "default"
   }
 }
 provider "aws" {
   region     = "us-east-1"
-  shared_credentials_files = ["/home/ubuntu/.aws/credentials"]
+  shared_credentials_file = "/home/ubuntu/.aws/credentials"
   profile                 = "default"
 }
-
