@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: '3.9'
 
-      - run version script:
+      - name: version script:
         id: version_script
         run: |
         output=$(python app_version_inc.py)
