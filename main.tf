@@ -44,7 +44,7 @@ resource "aws_key_pair" "ec2_key_pair" {
 
 resource "null_resource" "save_private_key" {
   provisioner "local-exec" {
-    command = "echo '${tls_private_key.ec2_key.private_key_pem}' > java-app.pem"
+    command = "echo '${tls_private_key.ec2_key.private_key_pem}' > /home/runner/work/_temp/java-app.pem"
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_instance" "java-app" {
       connection {
         type        = "ssh"
         user        = "ubuntu"
-        private_key = file("java-app.pem")
+        private_key = file("/home/runner/work/_temp/java-app.pem")
         host        = self.public_ip
         }
     }
