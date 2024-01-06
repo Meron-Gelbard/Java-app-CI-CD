@@ -46,11 +46,17 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Download version file from S3
+        run: aws s3 cp s3://terafform-backend/global/java_app_version.txt .
+
       - name: version script
         id: version_script
         run: |
           output=$(python app_version_inc.py)
           echo "::set-output name=version::$output"
+
+      - name: Upload version file update to S3
+        run: aws s3 cp java_app_version.txt s3://terafform-backend/global/java_app_version.txt
 
       - name: Build and push
         uses: docker/build-push-action@v5
