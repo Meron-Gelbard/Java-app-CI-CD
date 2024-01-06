@@ -49,8 +49,8 @@ jobs:
       - name: version script
         id: version_script
         run: |
-        output=$(python app_version_inc.py)
-        echo "::set-output name=version::$output"
+          output=$(python app_version_inc.py)
+          echo "::set-output name=version::$output"
 
       - name: Build and push
         uses: docker/build-push-action@v5
