@@ -38,7 +38,6 @@ resource "aws_instance" "java-app" {
   instance_type = "t2.micro"
   subnet_id = "subnet-020b671b71c37c581"
   vpc_security_group_ids = [aws_security_group.JAVA-APP-sg.id]
-  key_name               = "java-app-key"
   tags = {
     Name = "java-app"
   }
