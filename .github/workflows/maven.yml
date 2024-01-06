@@ -75,7 +75,7 @@ jobs:
     - name: Initialize Terraform
       run: terraform init
 
-    #- name: Destroy existing resources
+    #- name: Destroy existing resources 
     #  run: terraform destroy -auto-approve
 
     - name: Apply Terraform changes
