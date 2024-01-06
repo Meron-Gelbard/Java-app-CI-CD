@@ -95,4 +95,4 @@ jobs:
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
-          -replace="aws_instance.example"
+          -replace="aws_instance.java-app"
