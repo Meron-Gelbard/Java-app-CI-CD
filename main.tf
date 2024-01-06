@@ -33,21 +33,6 @@ resource "aws_security_group" "JAVA-APP-sg" {
   }
 }
 
-resource "tls_private_key" "ec2_key" {
-  algorithm = "RSA"
-}
-
-resource "aws_key_pair" "ec2_key_pair" {
-  key_name   = "java-app-key"
-  public_key = tls_private_key.ec2_key.public_key_openssh
-}
-
-resource "null_resource" "save_private_key" {
-  provisioner "local-exec" {
-    command = "echo '${tls_private_key.ec2_key.private_key_pem}' > /home/runner/work/_temp/java-app.pem"
-  }
-}
-
 resource "aws_instance" "java-app" {
   ami           = "ami-0c7217cdde317cfec"
   instance_type = "t2.micro"
@@ -58,24 +43,16 @@ resource "aws_instance" "java-app" {
     Name = "java-app"
   }
 
-  provisioner "remote-exec" {
-      inline = [
-        "sudo apt-get update -y",
-        "sudo apt-get install -y docker.io",
-        "sudo systemctl start docker",
-        "sudo usermod -aG docker ubuntu",
-        "sudo apt-get install -y git",
-        "sudo systemctl enable docker",
-        "sudo docker login --username=${var.dockerhub_username} --password=${var.dockerhub_password}",
-        "sudo docker pull ${var.dockerhub_username}/java-app:latest",
-        "sudo docker run -d ${var.dockerhub_username}/java-app:latest",
-      ]
-
-      connection {
-        type        = "ssh"
-        user        = "ubuntu"
-        private_key = file("/home/runner/work/_temp/java-app.pem")
-        host        = self.public_ip
-        }
-    }
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt-get update -y
+              sudo apt-get install -y docker.io
+              sudo systemctl start docker
+              sudo usermod -aG docker ubuntu
+              sudo apt-get install -y git
+              sudo systemctl enable docker
+              sudo docker login --username=${var.dockerhub_username} --password=${var.dockerhub_password}
+              sudo docker pull ${var.dockerhub_username}/java-app:latest
+              sudo docker run -d ${var.dockerhub_username}/java-app:latest
+              EOF
 }
