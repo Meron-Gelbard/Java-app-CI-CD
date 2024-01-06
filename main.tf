@@ -33,6 +33,10 @@ resource "aws_security_group" "JAVA-APP-sg" {
   }
 }
 
+resource "tls_private_key" "ec2_key" {
+  algorithm = "RSA"
+}
+
 resource "aws_key_pair" "ec2_key_pair" {
   key_name   = "java-app-key"
   public_key = tls_private_key.ec2_key.public_key_openssh
