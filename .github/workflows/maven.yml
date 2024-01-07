@@ -118,4 +118,4 @@ jobs:
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
-          -var="app_version={{steps.app_version.outputs.version}}"
+          -var="app_version=${{steps.app_version.outputs.version}}"
