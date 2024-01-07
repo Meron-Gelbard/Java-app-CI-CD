@@ -23,7 +23,7 @@ resource "aws_instance" "java-app" {
   subnet_id = "subnet-020b671b71c37c581"
   vpc_security_group_ids = [aws_security_group.JAVA-APP-sg.id]
   tags = {
-    Name = "java-app"
+    Name = "Java-App-${var.app_version}"
   }
 
   user_data = <<-EOF

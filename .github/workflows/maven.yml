@@ -102,6 +102,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: "us-east-1"
 
+    - name: Get version from S3
+      id: app_version
+      run: |
+         aws s3 cp s3://terafform-backend/global/java_app_version.txt .
+         version=$(cat java_app_version.txt | awk '{print $4}')
+         echo "::set-output name=version::$version"
+
     - name: Initialize Terraform
       run: terraform init
 
@@ -110,4 +117,5 @@ jobs:
         terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
-          -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}"
+          -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
+          -var="app_version={{steps.app_version.outputs.version}}"
