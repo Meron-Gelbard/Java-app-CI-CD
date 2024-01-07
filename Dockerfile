@@ -5,12 +5,13 @@ WORKDIR /app
 COPY . .
 
 RUN mvn clean package
-RUN mvn install
 
 FROM openjdk:11-jre-slim
 
-COPY --from=build /app/target/my-app-1.0-SNAPSHOT.jar \
-/app/java_app_version.txt \
- /app/target/my-app-1.0-SNAPSHOT.jar
+COPY --from=build /app/java_app_version.txt ./java_app_version.txt
 
-CMD cat java_app_version.txt; java -jar /app/target/my-app-1.0-SNAPSHOT.jar
+RUN VERSION=$(cat java_app_version.txt | awk '{print $4}')
+
+COPY --from=build /app/target/my-app-$VERSION.jar /app/target/my-app-$VERSION.jar
+
+CMD ["java","-jar","/app/target/my-app-$VERSION.jar"]
