@@ -14,4 +14,4 @@ ENV VERSION=${VERSION_ARG}
 
 COPY --from=build /app/target/my-app-${VERSION}.jar /app/target/my-app-${VERSION}.jar
 
-CMD ["java","-jar","/app/target/my-app-${VERSION}.jar"]
+CMD java -jar "/app/target/my-app-${VERSION}.jar"
