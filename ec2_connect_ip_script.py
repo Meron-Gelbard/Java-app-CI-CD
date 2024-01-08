@@ -11,6 +11,6 @@ ip_dict = {"cn-north-1": "43.196.20.40/29", "cn-northwest-1": "43.192.155.8/29",
            "eu-west-2": "3.8.37.24/29", "eu-west-3": "35.180.112.80/29", "me-central-1": "3.29.147.40/29",
            "me-south-1": "16.24.46.56/29", "sa-east-1": "18.228.70.32/29", "us-east-1": "18.206.107.24/29",
            "us-east-2": "3.16.146.0/29"}
-
-print(ip_dict[sys.argv[1]])
+ip = {"ip": ip_dict[sys.argv[1]]}
+print(str(ip))
 
