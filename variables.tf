@@ -32,4 +32,5 @@ data "external" "ip_script_output" {
 
 locals {
   ec2_connect_ip = "${data.external.ip_script_output.result}"
+  aws_region = "${var.aws_region}"
 }
