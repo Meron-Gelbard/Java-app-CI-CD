@@ -22,10 +22,6 @@ variable "aws_region" {
   description = "aws region"
 }
 
-provider "external" {
-  version = "1.2.0"
-}
-
 data "external" "ip_script_output" {
   program = ["python3", "${path.module}/ec2_connect_ip_script.py", "${var.aws_region}"]
 }

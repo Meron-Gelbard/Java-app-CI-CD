@@ -20,3 +20,7 @@ provider "aws" {
   shared_credentials_file = "/home/ubuntu/.aws/credentials"
   profile                 = "default"
 }
+
+provider "external" {
+  version = "1.2.0"
+}
