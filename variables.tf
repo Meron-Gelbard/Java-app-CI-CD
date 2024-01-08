@@ -30,7 +30,6 @@ data "external" "ip_script_output" {
   program = ["python3", "${path.module}/ec2_connect_ip_script.py", "${var.aws_region}"]
 }
 
-variable "ec2_connect_ip" {
-  type    = string
-  default = "${data.external.ip_script_output.result}"
+locals {
+  ec2_connect_ip = "${data.external.ip_script_output.result}"
 }

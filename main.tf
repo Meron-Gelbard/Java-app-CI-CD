@@ -9,7 +9,7 @@ resource "aws_security_group" "JAVA-APP-sg" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["${var.ec2_connect_ip}"]
+    cidr_blocks      = ["${local.ec2_connect_ip}"]
   }
 
   egress {
