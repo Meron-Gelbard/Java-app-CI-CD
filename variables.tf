@@ -32,5 +32,5 @@ data "external" "ip_script_output" {
 
 variable "ec2_connect_ip" {
   type    = string
-  default = data.external.ip_script_output.result
+  default = "${data.external.ip_script_output.result}"
 }
