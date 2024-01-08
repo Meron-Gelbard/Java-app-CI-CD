@@ -17,17 +17,3 @@ variable "vpc_id" {
 variable "subnet_id" {
   description = "subnet id"
 }
-
-variable "aws_region" {
-  description = "aws region"
-  default = "us-east-1"
-}
-
-data "external" "ip_script_output" {
-  program = ["python3", "${path.module}/ec2_connect_ip_script.py", "${var.aws_region}"]
-}
-
-locals {
-  ec2_connect_ip = data.external.ip_script_output.result
-  aws_region = var.aws_region
-}
