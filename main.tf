@@ -1,8 +1,8 @@
 
 resource "aws_security_group" "JAVA-APP-sg" {
   name        = "JAVA-APP-sg"
-  description = "Allow SSH"
-  vpc_id      = "vpc-05984e1e104d4023b"
+  description = "java app SG"
+  vpc_id      = ${var.app_version}
 
   egress {
     from_port        = 0
@@ -20,7 +20,7 @@ resource "aws_security_group" "JAVA-APP-sg" {
 resource "aws_instance" "java-app" {
   ami           = "ami-0c7217cdde317cfec"
   instance_type = "t2.micro"
-  subnet_id = "subnet-020b671b71c37c581"
+  subnet_id = ${var.subnet_id}
   vpc_security_group_ids = [aws_security_group.JAVA-APP-sg.id]
   tags = {
     Name = "Java-App-${var.app_version}"

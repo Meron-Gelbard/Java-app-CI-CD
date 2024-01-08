@@ -50,21 +50,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.9'
 
       - name: Download version file from S3
         run: aws s3 cp s3://terafform-backend/global/java_app_version.txt .
 
-      - name: version script
+      - name: Run version script
         id: version_script
         run: |
           output=$(python app_version_inc.py)
           echo "::set-output name=version::$output"
 
-      - name: Upload version file update to S3
+      - name: Update version file in S3
         run: aws s3 cp java_app_version.txt s3://terafform-backend/global/java_app_version.txt
 
       - name: Build and push
@@ -119,4 +119,6 @@ jobs:
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
-          -var="app_version=${{steps.app_version.outputs.version}}"
+          -var="app_version=${{steps.app_version.outputs.version}}" \
+          -var="vpc_id=${{secrets.VPC_ID}}" \
+          -var="subnet_id=${{ ecrets.SUBNET_ID}}"
