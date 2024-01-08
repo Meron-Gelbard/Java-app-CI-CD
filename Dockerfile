@@ -8,9 +8,9 @@ RUN mvn clean package
 
 FROM openjdk:11-jre-slim
 
-COPY --from=build /app/java_app_version.txt ./java_app_version.txt
+ARG VERSION_ARG
 
-ENV VERSION=$(cat java_app_version.txt | awk '{print $4}')
+ENV VERSION=$VERSION_ARG
 
 COPY --from=build /app/target/my-app-$VERSION.jar /app/target/my-app-$VERSION.jar
 
