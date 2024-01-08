@@ -50,11 +50,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: '3.9'
-
       - name: Download version file from S3
         run: aws s3 cp s3://terafform-backend/global/java_app_version.txt .
 
