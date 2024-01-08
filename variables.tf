@@ -20,6 +20,7 @@ variable "subnet_id" {
 
 variable "aws_region" {
   description = "aws region"
+  default = "us-east-1"
 }
 
 data "external" "ip_script_output" {
