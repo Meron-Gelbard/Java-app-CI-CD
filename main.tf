@@ -1,8 +1,16 @@
 
 resource "aws_security_group" "JAVA-APP-sg" {
   name        = "JAVA-APP-sg"
-  description = "java app SG"
+  description = "Java App-Allow-ssh"
   vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    description      = "allow SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["43.196.20.40/29"]
+  }
 
   egress {
     from_port        = 0
