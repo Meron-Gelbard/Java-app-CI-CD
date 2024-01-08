@@ -119,6 +119,6 @@ jobs:
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
-          -var="app_version=${{steps.app_version.outputs.version}}" \
-          -var="vpc_id=${{secrets.VPC_ID}}" \
-          -var="subnet_id=${{ ecrets.SUBNET_ID}}"
+          -var="app_version=${{ steps.app_version.outputs.version }}" \
+          -var="vpc_id=${{ secrets.VPC_ID }}" \
+          -var="subnet_id=${{ secrets.SUBNET_ID }}"
