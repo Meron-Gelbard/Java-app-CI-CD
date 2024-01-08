@@ -2,7 +2,7 @@
 resource "aws_security_group" "JAVA-APP-sg" {
   name        = "JAVA-APP-sg"
   description = "java app SG"
-  vpc_id      = ${var.app_version}
+  vpc_id      = "${var.vpc_id}"
 
   egress {
     from_port        = 0
@@ -20,7 +20,7 @@ resource "aws_security_group" "JAVA-APP-sg" {
 resource "aws_instance" "java-app" {
   ami           = "ami-0c7217cdde317cfec"
   instance_type = "t2.micro"
-  subnet_id = ${var.subnet_id}
+  subnet_id = "${var.subnet_id}"
   vpc_security_group_ids = [aws_security_group.JAVA-APP-sg.id]
   tags = {
     Name = "Java-App-${var.app_version}"
