@@ -8,7 +8,8 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-
+.terraform.lock.hcl
+.terraform/
 !/.mvn/wrapper/maven-wrapper.jar
 
 .idea
