@@ -51,7 +51,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Download version file from S3
-        run: aws s3 cp s3://terafform-backend/global/java_app_version.txt .
+        run: aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
 
       - name: Run version script
         id: version_script
@@ -60,7 +60,7 @@ jobs:
           echo "::set-output name=version::$output"
 
       - name: Update version file in S3
-        run: aws s3 cp java_app_version.txt s3://terafform-backend/global/java_app_version.txt
+        run: aws s3 cp java_app_version.txt s3://javaapp-terraform-backend/global/java_app_version.txt
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -101,7 +101,7 @@ jobs:
     - name: Get version from S3
       id: app_version
       run: |
-         aws s3 cp s3://terafform-backend/global/java_app_version.txt .
+         aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
          version=$(cat java_app_version.txt | awk '{print $4}')
          echo "::set-output name=version::$version"
 
