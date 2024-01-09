@@ -110,7 +110,7 @@ jobs:
 
     - name: Apply Terraform changes
       run: |
-        terraform taint aws_instance.java-app
+        terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
