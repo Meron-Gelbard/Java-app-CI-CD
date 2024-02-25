@@ -70,7 +70,7 @@ jobs:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
-          build-args: VERSION_ARG=${{steps.version_script.outputs.version}}
+          build-args: VERSION_ARG=1.0.0
           tags: ${{ secrets.DOCKER_USERNAME }}/java-app:latest
           # ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_script.outputs.version}}
 
