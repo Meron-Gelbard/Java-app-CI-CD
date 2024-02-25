@@ -50,17 +50,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Download version file from S3
-        run: aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
+      # - name: Download version file from S3
+      #   run: aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
 
-      - name: Run version script
-        id: version_script
-        run: |
-          output=$(python app_version_inc.py)
-          echo "::set-output name=version::$output"
+      # - name: Run version script
+      #   id: version_script
+      #   run: |
+      #     output=$(python app_version_inc.py)
+      #     echo "::set-output name=version::$output"
 
-      - name: Update version file in S3
-        run: aws s3 cp java_app_version.txt s3://javaapp-terraform-backend/global/java_app_version.txt
+      # - name: Update version file in S3
+      #   run: aws s3 cp java_app_version.txt s3://javaapp-terraform-backend/global/java_app_version.txt
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -69,9 +69,8 @@ jobs:
           file: ./Dockerfile
           push: true
           build-args: VERSION_ARG=${{steps.version_script.outputs.version}}
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_script.outputs.version}}
-            ${{ secrets.DOCKER_USERNAME }}/java-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/java-app:latest
+          # ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_script.outputs.version}}
 
   terraform-provision:
     runs-on: ubuntu-latest
@@ -98,22 +97,33 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: "us-east-1"
 
-    - name: Get version from S3
-      id: app_version
-      run: |
-         aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
-         version=$(cat java_app_version.txt | awk '{print $4}')
-         echo "::set-output name=version::$version"
+    # - name: Get version from S3
+    #   id: app_version
+    #   run: |
+    #      aws s3 cp s3://javaapp-terraform-backend/global/java_app_version.txt .
+    #      version=$(cat java_app_version.txt | awk '{print $4}')
+    #      echo "::set-output name=version::$version"
 
-    - name: Initialize Terraform
+    - name: Init Terraform Backend
+      working-directory: ./terraform_backend
       run: terraform init
 
     - name: Apply Terraform changes
+      working-directory: ./terraform_backend
+      run: terraform apply -auto-approve \
+      -var="aws_region =us-east-1" \ 
+      -var="backend_lock_name=meron-backend-lock" \
+      -var="backend_bucket_name=meron-backend-bucket" \
+      -var="aws_credentials=~/.aws/credentials"
+
+    - name: Init App TF Module
+      working-directory: ./IaC_app
+      run: terraform init
+
+    - name: Apply Terraform changes
+      working-directory: ./IaC_app
       run: |
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
-          -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
-          -var="app_version=${{ steps.app_version.outputs.version }}" \
-          -var="vpc_id=${{ secrets.VPC_ID }}" \
-          -var="subnet_id=${{ secrets.SUBNET_ID }}"
+          -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" 

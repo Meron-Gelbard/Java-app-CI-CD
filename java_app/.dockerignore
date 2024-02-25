@@ -11,9 +11,6 @@
 *.config
 *.swp
 *.bak
-*.tf
 *.py
 
-Thumbs.db
-README.md
 Dockerfile

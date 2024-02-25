@@ -10,6 +10,8 @@ buildNumber.properties
 .mvn/timing.properties
 .terraform.lock.hcl
 .terraform/
+terraform.tfstate
+terraform.tfstate.backup
 !/.mvn/wrapper/maven-wrapper.jar
 
 .idea
