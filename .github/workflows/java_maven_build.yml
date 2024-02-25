@@ -16,9 +16,11 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B -DskipTests clean package --file ./java_app/pom.xml
+      working-directory: ./java_app
+      run: mvn -B -DskipTests clean package --file pom.xml
 
     - name: Test with maven
+      working-directory: ./java_app
       run: mvn test
 
   build-push-docker:
