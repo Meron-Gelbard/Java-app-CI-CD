@@ -111,7 +111,7 @@ jobs:
     - name: Apply Terraform changes
       working-directory: ./terraform_backend
       run: terraform apply -auto-approve \
-      -var="aws_region =us-east-1" \ 
+      -var="aws_region=us-east-1" \ 
       -var="backend_lock_name=meron-backend-lock" \
       -var="backend_bucket_name=meron-backend-bucket" \
       -var="aws_credentials=~/.aws/credentials"
