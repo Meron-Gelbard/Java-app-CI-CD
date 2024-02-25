@@ -65,11 +65,10 @@ jobs:
       #   run: aws s3 cp java_app_version.txt s3://javaapp-terraform-backend/global/java_app_version.txt
 
       - name: Build and push
-        working-directory: ./java_app
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./java_app/
+          file: ./java_app/Dockerfile
           push: true
           build-args: VERSION_ARG=${{steps.version_script.outputs.version}}
           tags: ${{ secrets.DOCKER_USERNAME }}/java-app:latest
