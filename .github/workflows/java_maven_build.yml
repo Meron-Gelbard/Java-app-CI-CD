@@ -125,7 +125,7 @@ jobs:
     - name: Apply Terraform app
       working-directory: ./IaC_app
       run: |
-        ec2_connect_ip=$(IaC_app/ec2_connect_ip_script.py ${{ secrets.AWS_REGION }})
+        ec2_connect_ip=$(python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }})
         echo "::set-output name=output_value::$output_value"
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
