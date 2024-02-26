@@ -13,8 +13,6 @@ ARG VERSION_ARG
 ENV VERSION=${VERSION_ARG}
 
 
-COPY --from=build /app/java_app_version.txt /app/target/java_app_version.txt
-RUN export VERSION=$(cat /app/target/java_app_version.txt)
-COPY --from=build /app/target/my-app-${VERSION}.jar /app/target/my-app-${VERSION}.jar
+COPY --from=build /app/target/*.jar /app/target/
 
-CMD export VERSION=$(cat /app/target/java_app_version.txt) && java -jar "/app/target/my-app-${VERSION}.jar"
+CMD java -jar /app/target/*.jar
