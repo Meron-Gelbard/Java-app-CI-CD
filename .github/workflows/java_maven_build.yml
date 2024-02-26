@@ -38,8 +38,8 @@ jobs:
         working-directory: ./java_app
         run: |
           NEW_VERSION=$(python app_version_inc.py)
-          git config --global user.email "workflow@github.com"
-          git config --global user.name "github"
+          git config --global user.email "${{ secrets.OWNER_EMAIL }}"
+          git config --global user.name "${{ secrets.OWNER_USERNAME }}"
           git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git add .
           git commit -m "new version - $NEW_VERSION"
@@ -131,5 +131,5 @@ jobs:
           -var="ec2_connect_ip=$ec2_cnct_ip" \
           -var="app_version=$version"
 
-          
+
 
