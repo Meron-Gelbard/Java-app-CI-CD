@@ -14,5 +14,5 @@ ip_dict = {"cn-north-1": "43.196.20.40/29", "cn-northwest-1": "43.192.155.8/29",
            "us-east-2": "3.16.146.0/29"}
 
 ip = {"ip": ip_dict[sys.argv[1]]}
-print(f'"{json.dumps(ip)}"')
+print(f'"{ip["ip"]}"')
 

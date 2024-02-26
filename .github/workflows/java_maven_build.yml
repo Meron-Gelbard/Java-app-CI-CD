@@ -126,7 +126,7 @@ jobs:
       working-directory: ./IaC_app
       run: |
         ec2_connect_ip=$(python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }})
-        echo "::set-output name=output_value::$output_value"
+        echo $ec2_connect_ip
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
