@@ -21,7 +21,7 @@ terraform {
     region         = "$region"
     dynamodb_table = "$table"
     encrypt        = true
-    shared_credentials_files = ["$creds"]
+    shared_credentials_file = "$creds"
     profile                 = "default"
   }
 }
