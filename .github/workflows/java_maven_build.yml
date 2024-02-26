@@ -77,7 +77,7 @@ jobs:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
-          build-args: VERSION_ARG=$(cat java_app_version.txt | awk '{print $4}')
+          build-args: VERSION_ARG=$NEW_VERSION
           tags: ${{ secrets.DOCKER_USERNAME }}/java-app:latest
 
   terraform-provision:
