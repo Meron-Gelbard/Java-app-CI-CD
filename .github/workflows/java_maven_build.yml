@@ -1,9 +1,10 @@
 name: Java CI/CD with Maven
 on:
   push:
-    branches: [ "master" ]
-  tags-ignore:
-    - v*
+    branches:
+      - "master"
+    tags-ignore:
+      - v*
 
 jobs:
   build-test-java:
