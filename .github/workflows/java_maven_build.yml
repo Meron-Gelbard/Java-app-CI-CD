@@ -131,3 +131,5 @@ jobs:
           -var="ec2_connect_ip=$ec2_cnct_ip" \
           -var="app_version=$version"
 
+          
+
