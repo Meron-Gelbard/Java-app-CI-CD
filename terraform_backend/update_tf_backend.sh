@@ -27,7 +27,7 @@ terraform {
 }
 provider "aws" {
   region     = "$region"
-  shared_credentials_files = ["$creds"]
+  shared_credentials_file = "$creds"
   profile                 = "default"
 }
 EOF
