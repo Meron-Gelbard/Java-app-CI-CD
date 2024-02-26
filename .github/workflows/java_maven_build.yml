@@ -40,6 +40,8 @@ jobs:
           NEW_VERSION=$(python app_version_inc.py)
           git config --global user.email "${{ secrets.OWNER_EMAIL }}"
           git config --global user.name "${{ secrets.OWNER_USERNAME }}"
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout "${GITHUB_REF:11}"
           git add .
           git commit -m "new version - $NEW_VERSION"
           git tag -a v$NEW_VERSION -m "Release version $NEW_VERSION"
