@@ -12,12 +12,12 @@ terraform {
     region         = "us-east-1"
     dynamodb_table = "java-app-tf-lock"
     encrypt        = true
-    shared_credentials_file = "/Users/merongelbard/.aws/credentials"
+    shared_credentials_file = "~/.aws/credentials"
     profile                 = "default"
   }
 }
 provider "aws" {
   region     = "us-east-1"
-  shared_credentials_file = "/Users/merongelbard/.aws/credentials"
+  shared_credentials_file = "~/.aws/credentials"
   profile                 = "default"
 }

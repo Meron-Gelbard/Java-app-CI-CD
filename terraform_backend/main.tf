@@ -9,13 +9,13 @@ terraform {
 
 provider "aws" {
   region                 = var.aws_region
-  shared_credentials_file = var.aws_credentials
+  shared_credentials_file = "~/.aws/credentials"
   profile                = "default"
 }
 
 
 resource "aws_s3_bucket" "tf-remote-backend" {
-  bucket = var.backend_bucket_name
+  bucket = "java-app-tf-backend"
 
   lifecycle {
     ignore_changes = all
@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "tf-remote-backend" {
 }
 
 resource "aws_dynamodb_table" "backend_lock" {
-  name           = var.backend_lock_name
+  name           = "java-app-tf-lock"
   hash_key       = "LockID"
   read_capacity  = 1
   write_capacity = 1  
@@ -37,9 +37,3 @@ resource "aws_dynamodb_table" "backend_lock" {
     ignore_changes = all
   }
 }
-
-# resource "null_resource" "update-backend-details" {
-#   provisioner "local-exec" {
-#     command = "bash update_tf_backend.sh ${var.aws_region} ${var.aws_credentials} ${var.backend_bucket_name} ${var.backend_lock_name}"
-#   }
-# }
