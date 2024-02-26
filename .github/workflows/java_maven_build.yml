@@ -78,7 +78,7 @@ jobs:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
-          build-args: VERSION_ARG=$NEW_VERSION
+          # build-args: VERSION_ARG=$NEW_VERSION
           tags: ${{ secrets.DOCKER_USERNAME }}/java-app:latest
 
   terraform-provision:
@@ -135,6 +135,3 @@ jobs:
           -var="aws_region=${{ secrets.AWS_REGION }}" \
           -var="ec2_connect_ip=$ec2_cnct_ip" \
           -var="app_version=$version"
-
-
-          
