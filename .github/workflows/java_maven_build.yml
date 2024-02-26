@@ -37,8 +37,9 @@ jobs:
       - name: Increment version and push
         working-directory: ./java_app
         run: |
-
           NEW_VERSION=$(python app_version_inc.py)
+          git config --global user.email "workflow@github.com"
+          git config --global user.name "github" 
           git add .
           git commit -m "new version - $NEW_VERSION"
           git tag -a v$NEW_VERSION -m "Release version $NEW_VERSION"
