@@ -113,11 +113,11 @@ jobs:
         then
           echo "Backend bucket found."
         else
-          echo "Backend bucket not found".
+          echo "Backend bucket not found."
           terraform init
           terraform apply -auto-approve 
         fi
-        
+
     - name: Init App TF Module
       working-directory: ./IaC_app
       run: terraform init
