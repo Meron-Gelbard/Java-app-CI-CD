@@ -48,7 +48,7 @@ jobs:
           git commit -m "new version - $NEW_VERSION"
           git tag -a v$NEW_VERSION -m "Release version $NEW_VERSION"
           git push
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "NEW_VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install AWS CLI
         run: |
@@ -72,6 +72,8 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push
+        env:
+          NEW_VERSION: ${{ steps.version_push.outputs.NEW_VERSION }}
         uses: docker/build-push-action@v5
         with:
           context: ./java_app/
