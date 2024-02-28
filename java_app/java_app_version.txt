@@ -1,1 +1,1 @@
-Java App Version: 1.0.8
+Java App Version: 1.0.9
