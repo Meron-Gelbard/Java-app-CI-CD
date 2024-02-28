@@ -127,13 +127,11 @@ jobs:
       working-directory: ./IaC_app
       run: |
         VERSION=${{steps.version_push.outputs.VERSION}}
-        ec2_cnct_ip=$(python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }})
+        python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }}
         echo $ec2_cnct_ip
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
           -var="aws_region=${{ secrets.AWS_REGION }}" \
-          -var="ec2_connect_ip=$ec2_cnct_ip" \
           -var="app_version=$VERSION"
-          
