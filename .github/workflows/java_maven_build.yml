@@ -36,7 +36,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: version_push
+      - name: Push new version
+        id: version_push
         working-directory: ./java_app
         run: |
           NEW_VERSION=$(python app_version_inc.py)
@@ -73,14 +74,12 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v5
-        env:
-          NEW_VERSION: $(cat ./java_app/java_app_version.txt | awk '{print $4}')
         with:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/java-app:$NEW_VERSION
+            ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_push.outputs.NEW_VERSION}}
             ${{ secrets.DOCKER_USERNAME }}/java-app:latest
 
   terraform-provision:
