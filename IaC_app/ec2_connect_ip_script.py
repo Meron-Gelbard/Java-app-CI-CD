@@ -17,4 +17,5 @@ ip = ip_dict[sys.argv[1]]
 
 with open("terraform.tfvars", "a") as variable_file:
     variable_file.writelines(f"ec2_connect_ip = {ip}")
+    
 
