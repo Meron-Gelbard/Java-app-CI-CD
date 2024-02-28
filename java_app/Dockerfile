@@ -12,7 +12,6 @@ ARG VERSION_ARG
 
 ENV VERSION=${VERSION_ARG}
 
-
 COPY --from=build /app/target/*.jar /app/target/
 
 CMD java -jar /app/target/*.jar

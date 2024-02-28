@@ -1,7 +1,7 @@
 # Java App - Docker Image Update & deployment Pipeline
 
 In This project a simple *"Hello World!"* Java app is updated using a *GitHub Actions* workflow for re-building, testing, and deploying a Docker image of the updated app.
-The pipeline is triggered on push events and runs jobs of build, test and deployment as container running on *EC2*.
+The pipeline is triggered on push events and runs jobs of build, test and deployment as a container running on *EC2*.
 
 ## Features
 
@@ -11,13 +11,15 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
 
 - The pipline updates a *Docker* image of the app using an included *Dockerfile*.
 
-- A *Python* script increments the app version on each pipeline run. The version is stored as a text file in *S3* and updated in the *"pom.xml"* file.
+- A *Python* script increments the app version on each pipeline run. The version is stored as a text file and updated in the *"pom.xml"* file. Updated file is then pushed back to the repo from inside the pipeline.
 
-- The pipeline pushes updates the *Docker* image in a *DockerHub* registry with a *<version>* and a *"latest"* tags.
+- The pipeline pushes and updates the *Docker* image in a *DockerHub* registry with a *<version>* and a *"latest"* tags.
 
-- The pipeline runs a *Terraform* module that deploys the app on *EC2* and creates a suitable security group. *EC2* is pre-configured to run the latest *Docker* image.
+- The pipeline runs a *Terraform* module that deploys a full VPC staging environment with the updated app running on an *EC2* and creates a suitable security group for connecting via SSH using the *EC2 Instance Connect* service. *EC2* is pre-configured with user-data to run the latest *Docker* image.
 
-- The app execution can be viewed in a terminal using *"AWS EC2 Instance Connect"* platform.
+**A Terraform Remote Backend will also be configured from inside the pipeline to allow remote management of the deployed Infrastructure from your local machine**
+
+- The app execution can be viewed in a terminal using *"AWS EC2 Instance Connect"* servive from the AWS console.
 
 
 ## How to Setup the pipeline, trigger it and view the results:
@@ -39,18 +41,16 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
       * AWS_SECRET_ACCESS_KEY - *From your AWS account credentials.*
       * DOCKER_USERNAME - *Dockerhub user for creating a registry.*
       * DOCKER_PASSWORD - *Dockerhub password.*
-      * VPC_ID - *ID of a target VPC where the app will run.*
-      * SUBNET_ID - *ID of a target public subnet with auto-assign public-ip.*
 
-3. **Create Terraform remote backend and app version file:**
+<!-- 3. **Create Terraform remote backend and app version file:**
     - Log in to your AWS account.
     - Navigate to *S3* and create a bucket named *"javaapp-terraform-backend"*.
     - Create the folder path *"global/s3/"* for the *Terraform* remote state file.
-    - Create file *"/global/java_app_version.txt"* with the text *"Java App Version: 1.0.0"*.
+    - Create file *"/global/java_app_version.txt"* with the text *"Java App Version: 1.0.0"*. -->
 
-4. **Create DynamoDB table for state locking:**
+<!-- 4. **Create DynamoDB table for state locking:**
     - Navigate to *DynamoDB* service dashboard.
-    - Create a new table named *"terraform-lock"* with partition key *"LockID"*.
+    - Create a new table named *"terraform-lock"* with partition key *"LockID"*. -->
 
 5. **Make some changes to repo, commit and push:**
    ``` bash
