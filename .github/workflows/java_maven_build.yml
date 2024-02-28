@@ -77,7 +77,7 @@ jobs:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
-          tags: 
+          tags: |
             ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_push.outputs.VERSION}}
             ${{ secrets.DOCKER_USERNAME }}/java-app:latest
 
