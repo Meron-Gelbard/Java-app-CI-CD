@@ -16,6 +16,6 @@ ip_dict = {"cn-north-1": "43.196.20.40/29", "cn-northwest-1": "43.192.155.8/29",
 ip = ip_dict[sys.argv[1]]
 
 with open("terraform.tfvars", "a") as variable_file:
-    variable_file.writelines(f"ec2_connect_ip = {ip}")
-    
+    variable_file.writelines(f"\nec2_connect_ip = {ip}")
+
 
