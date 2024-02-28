@@ -1,1 +1,1 @@
-Java App Version: 1.0.20
+Java App Version: 1.0.21
