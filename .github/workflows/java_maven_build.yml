@@ -72,15 +72,13 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push
-        env:
-          NEW_VERSION: ${{ steps.version_push.outputs.NEW_VERSION }}
         uses: docker/build-push-action@v5
         with:
           context: ./java_app/
           file: ./java_app/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/java-app:$NEW_VERSION
+            ${{ secrets.DOCKER_USERNAME }}/java-app:${{steps.version_push.outputs.NEW_VERSION}}
             ${{ secrets.DOCKER_USERNAME }}/java-app:latest
 
   terraform-provision:
