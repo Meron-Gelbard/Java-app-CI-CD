@@ -42,6 +42,6 @@ resource "aws_dynamodb_table" "backend_lock" {
 resource "null_resource" "empty_backend_bucket" {
   provisioner "local-exec" {
     command = "aws s3 rm s3://java-app-tf-backend --recursive"
-    when    = "destroy"
+    when    = destroy
   }
 }
