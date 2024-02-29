@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 Java App Version: 1.0.22
+=======
+Java App Version: 1.0.0
+>>>>>>> 25eee07 (Final fixes)
