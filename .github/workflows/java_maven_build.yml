@@ -48,7 +48,7 @@ jobs:
           git add .
           git commit -m "new version - $NEW_VERSION"
           git tag -a v$NEW_VERSION -m "Release version $NEW_VERSION"
-          git push
+          git push --tags
           echo "NEW_VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install AWS CLI
