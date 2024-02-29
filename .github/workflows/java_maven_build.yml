@@ -105,7 +105,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: "us-east-1"
+        aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Deploy Terraform Backend
       working-directory: ./terraform_backend
@@ -124,7 +124,7 @@ jobs:
     - name: Apply Terraform app
       working-directory: ./IaC_app
       run: |
-        VERSION=${{steps.version_push.outputs.NEW_VERSION}}
+        VERSION=$(echo ${{steps.version_push.outputs.NEW_VERSION}})
         python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }}
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
