@@ -124,7 +124,7 @@ jobs:
     - name: Apply Terraform app
       working-directory: ./IaC_app
       run: |
-        VERSION=$(echo ${{steps.version_push.outputs.NEW_VERSION}})
+        VERSION=$(cat ../java_app/java_app_version.txt | awk '{print $4}')
         python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }}
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
