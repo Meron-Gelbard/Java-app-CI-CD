@@ -139,3 +139,4 @@ jobs:
           -var="dockerhub_password=${{ secrets.DOCKER_PASSWORD }}" \
           -var="aws_region=${{ secrets.AWS_REGION }}" \
           -var="app_version=$VERSION"
+
