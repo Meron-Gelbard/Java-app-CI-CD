@@ -110,15 +110,9 @@ jobs:
     - name: Deploy Terraform Backend
       working-directory: ./terraform_backend
       run: |
-        if aws s3api list-buckets --query 'Buckets[*].Name' | grep -q 'java-app-tf-backend';
-        then
-          aws s3 rm s3://java-app-tf-backend --recursive
-          aws s3 rb s3://java-app-tf-backend
-        fi
-        table_info=$(aws dynamodb describe-table --table-name "java-app-tf-lock" --query "Table" --output text 2>&1)
-        if [[ $table_info != *"TableNotFoundException"* ]]; then
-          aws dynamodb delete-table --table-name "java-app-tf-lock"
-        fi
+        aws s3 rm s3://java-app-tf-backend --recursive || true
+        aws s3 rb s3://java-app-tf-backend || true
+        aws dynamodb delete-table --table-name "java-app-tf-lock" || true
         terraform init
         terraform apply -auto-approve -var="aws_region=${{ secrets.AWS_REGION }}" 
         
@@ -132,7 +126,6 @@ jobs:
       run: |
         VERSION=${{steps.version_push.outputs.NEW_VERSION}}
         python ec2_connect_ip_script.py ${{ secrets.AWS_REGION }}
-        echo $ec2_cnct_ip
         terraform state list | grep -q 'aws_instance.java-app' && terraform taint aws_instance.java-app
         terraform apply -auto-approve \
           -var="dockerhub_username=${{ secrets.DOCKER_USERNAME }}" \
