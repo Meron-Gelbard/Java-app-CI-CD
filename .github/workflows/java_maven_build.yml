@@ -115,6 +115,10 @@ jobs:
           aws s3 rm s3://java-app-tf-backend --recursive
           aws s3 rb s3://java-app-tf-backend
         fi
+        table_info=$(aws dynamodb describe-table --table-name "java-app-tf-lock" --query "Table" --output text 2>&1)
+        if [[ $table_info != *"TableNotFoundException"* ]]; then
+          aws dynamodb delete-table --table-name "java-app-tf-lock"
+        fi
         terraform init
         terraform apply -auto-approve -var="aws_region=${{ secrets.AWS_REGION }}" 
         
