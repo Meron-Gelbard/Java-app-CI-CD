@@ -1,23 +1,23 @@
 # Java App - Docker Image Update & deployment Pipeline
 
-In This project a simple *"Hello World!"* Java app is updated using a *GitHub Actions* workflow for re-building, testing, and deploying a Docker image of the updated app.
+In This project a simple *"Hello World!"* Java app managed using a *GitHub Actions* workflow for re-building, testing, and deploying a Docker image of the updated app.
 The pipeline is triggered on push events and runs jobs of build, test and deployment as a container running on *EC2*.
 
 ## Features
 
-- Pipeline is defined in a yaml config file *".github/workflows/maven.yml"*.
+- Pipeline is defined in GitHub Actions Workflow yaml file in - *".github/workflows/java_maven_build.yml"*.
 
 - The Pipeline uses *Maven* to build and test the Java app.
 
-- The pipline updates a *Docker* image of the app using an included *Dockerfile*.
+- The pipline updates a *Docker* image of the app using the included *Dockerfile* in the *java_app* directory.
 
-- A *Python* script increments the app version on each pipeline run. The version is stored as a text file and updated in the *"pom.xml"* file. Updated file is then pushed back to the repo from inside the pipeline.
+- A *Python* script increments the app version on each pipeline run. The version is stored in *java_app_version* file and also updated in the *"pom.xml"* file. Updated version file is then pushed back to the repo from inside the pipeline.
 
-- The pipeline pushes and updates the *Docker* image in a *DockerHub* registry with a *<version>* and a *"latest"* tags.
+- The pipeline pushes and updates the *Docker* image in a *DockerHub* registry with a *"version"* and a *"latest"* tags.
 
-- The pipeline runs a *Terraform* module that deploys a full VPC staging environment with the updated app running on an *EC2* and creates a suitable security group for connecting via SSH using the *EC2 Instance Connect* service. *EC2* is pre-configured with user-data to run the latest *Docker* image.
+- The pipeline runs a *Terraform* module that deploys a full VPC staging environment with the updated app running on an *EC2*. It also creates a suitable security group for connecting via SSH using the *EC2 Instance Connect* service. The security group is defined with the right I.P according to the specified AWS region. *EC2* is pre-configured with *user-data* to run the latest *Docker* image.
 
-**A Terraform Remote Backend will also be configured from inside the pipeline to allow remote management of the deployed Infrastructure from your local machine**
+**A Terraform Remote Backend will be configured from inside the pipeline to allow remote management of the deployed Infrastructure from your local machine. This includes an S3 bucket for the remote state file and a DynamoDB table that acts as a state lock mechanism.**
 
 - The app execution can be viewed in a terminal using *"AWS EC2 Instance Connect"* servive from the AWS console.
 
@@ -25,7 +25,7 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
 ## How to Setup the pipeline, trigger it and view the results:
 
 1. **Fork and pull this repo:**
-    - In the main menu of this repo click *"Fork"* to copy to your *GitHub* account.
+    - In the main menu of this repo click *"Fork"* to make a copy in your *GitHub* account.
     - On your local machine initialize git and pull your new repo.
 
     ``` bash
@@ -39,21 +39,13 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
     - Add the following secrets using these exact names:
       * AWS_ACCESS_KEY_ID - *From your AWS account credentials.*
       * AWS_SECRET_ACCESS_KEY - *From your AWS account credentials.*
+      * AWS_REGION - *The AWS region in which to deploy the environment.*
       * DOCKER_USERNAME - *Dockerhub user for creating a registry.*
       * DOCKER_PASSWORD - *Dockerhub password.*
 
-<!-- 3. **Create Terraform remote backend and app version file:**
-    - Log in to your AWS account.
-    - Navigate to *S3* and create a bucket named *"javaapp-terraform-backend"*.
-    - Create the folder path *"global/s3/"* for the *Terraform* remote state file.
-    - Create file *"/global/java_app_version.txt"* with the text *"Java App Version: 1.0.0"*. -->
-
-<!-- 4. **Create DynamoDB table for state locking:**
-    - Navigate to *DynamoDB* service dashboard.
-    - Create a new table named *"terraform-lock"* with partition key *"LockID"*. -->
-
 5. **Make some changes to repo, commit and push:**
    ``` bash
+   git pull origin master
    #make some changes...
    git add .
    git commit -m "My changes commit"
@@ -71,7 +63,7 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
 
 8. **Connect and review deployed EC2:**
     - In the *EC2* service dashboard navigate to *"Instances"*.
-    - Locate your new deployed EC2 named *Java-App-<version>*.
+    - Locate your new deployed EC2 named *Java-App-version*.
     - Navigate to *"Connect"*, choose *"EC2 instance connect"* and click *"Connect"*.
     - Run the following command:
       ``` bash
@@ -80,9 +72,6 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
       ```
     - Check the log output: Should return the *"Hello World!"* message.
 
-* Pipeline is currently hard-coded for AWS region **"us-east-1"**.
-  **Make sure your target VPC is in this region.** This can be changed manually in the Terraform *"providers.tf"* file.
-
 
 ## Workflow Jobs:
 
@@ -90,12 +79,27 @@ The pipeline is triggered on push events and runs jobs of build, test and deploy
    - Builds and tests the new java app update using *Maven*.
 
 2. **Docker image build and push**
-   - Updates the version file in *S3* with new version tag.
+   - Increments the version in the file file and in the *pom.xml* file.
+   - Performs a git push to the repo to update the version file. (Pipeline is not triggered by this).
    - Builds a new updated *Docker* image.
-   - Pushes the new image to *DockerHub* with *<version>* and *"latest"* tags.
+   - Pushes the new image to *DockerHub* with *"version"* and *"latest"* tags.
 
 3. **Deployment to EC2**
    - Logs into *AWS-cli* using your *GitHub Actions Secrets*.
+   - Deploys S3 bucket and DynamoDB table for the Terraform remote Backend.
    - Deploys *EC2* and security group using *Terraform*.
    - The new *EC2* pulls and runs the updated image as a *Docker* container on startup.
    This is done using a *"user-data"* script given by *Terraform*.
+
+4. **Tear-Down**
+    In order to tear-down this environment:
+
+    - Init Terraform in the App IaC folder:
+    ``` bash
+      cd IaC_app
+      Terraform init
+      ```
+    - Destroy environment (approve when prompted):
+     ``` bash
+      Terraform destroy
+      ```

@@ -41,8 +41,8 @@ jobs:
         working-directory: ./java_app
         run: |
           NEW_VERSION=$(python app_version_inc.py)
-          git config --global user.email "${{ secrets.OWNER_EMAIL }}"
-          git config --global user.name "${{ secrets.OWNER_USERNAME }}"
+          git config --global user.email java_pipeline_runner@github.com
+          git config --global user.name java_pipeline_runner
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git checkout "${GITHUB_REF:11}"
           git add .
@@ -116,7 +116,6 @@ jobs:
         terraform init
         terraform apply -auto-approve -var="aws_region=${{ secrets.AWS_REGION }}" 
         
-
     - name: Init App TF Module
       working-directory: ./IaC_app
       run: terraform init
