@@ -1,7 +1,7 @@
 # Java App CI/CD Pipeline with GitHub Actions
 
-In This project a simple *"Hello World!"* Java app managed using a *GitHub Actions* workflow for re-building, testing, and deploying a Docker image of the updated app.
-The pipeline is triggered on push events and runs jobs of build, test and deployment as a container running on *EC2*.
+In This project a simple "Hello World!" Java app CI/CD pipeline is managed using a GitHub Actions workflow for re-building, testing, and deploying an updated Docker image of the app.
+The pipeline is triggered on push events and runs jobs of build, test and deployment in a container running on a staging area over AWS infrastructure deployed with Terraform.
 
 ## Features
 
