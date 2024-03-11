@@ -1,4 +1,4 @@
-# Java App - Docker Image Update & deployment Pipeline
+# Java App CI/CD Pipeline with GitHub Actions
 
 In This project a simple *"Hello World!"* Java app managed using a *GitHub Actions* workflow for re-building, testing, and deploying a Docker image of the updated app.
 The pipeline is triggered on push events and runs jobs of build, test and deployment as a container running on *EC2*.
